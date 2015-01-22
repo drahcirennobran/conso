@@ -1,4 +1,22 @@
 from string import Template
+import MySQLdb
+db = MySQLdb.connect("localhost","ric","coincoin","conso" )
+cursor = db.cursor()
+sql = "SELECT  idCompteur, captureDate, conso FROM conso"
+try:
+   cursor.execute(sql)
+
+   results = cursor.fetchall()
+   jsonString = []
+   for row in results:
+      idCompteur = row[0]
+      captureDate = row[1]
+      conso = row[2]
+      jsonString.append("{\"id\":%s,\"date\":\"%s\",\"mwh\":%s},\n" % (idCompteur, captureDate, conso))
+except:
+   print "Error: unable to fecth data"
+
+db.close();
 
 def application(environ, start_response):
 
@@ -7,7 +25,7 @@ def application(environ, start_response):
 
    #template = Template("<html><body><h1>Hello ${name}</h1></body></html>")
    template = Template(tplContent)
-   response_body = template.substitute(dict(name='Ric'))
+   response_body = template.substitute(dict(data=''.join(jsonString)[:-2]))
 
    status = '200 OK'
    response_headers = [('Content-Type', 'text/html'),
