@@ -59,6 +59,6 @@ function zoomChart(){
 </head>
 
 <body>
-    <div id="chartdiv" style="width: 640px; height: 400px;"></div>
+    <div id="chartdiv" style="width: 1024px; height: 768px;"></div>
 </body>
 </html>
