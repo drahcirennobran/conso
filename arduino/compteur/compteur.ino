@@ -7,7 +7,7 @@
 
 int etat = HIGH;
 unsigned long mwh = 0;
-unsigned long lastMillis;
+unsigned long lastChange;
 
 byte mac[] = {
   0x90, 0xA2, 0xDA, 0x0E, 0xA1, 0x92
@@ -20,7 +20,7 @@ void setup() {
   pinMode(PINLED, OUTPUT);
   digitalWrite(PINLED, etat);
 
-  attachInterrupt(PIN2INT, tick, FALLING);
+  attachInterrupt(PIN2INT, tick, CHANGE);
   Ethernet.begin(mac, ip);
   server.begin();
 }
@@ -42,21 +42,21 @@ void loop() {
       else if (containsCommand(line)) {
         //client.println(getMwh());
         client.println(String(mwh));
-        mwh=0;
+        mwh = 0;
       }
       line = client.readStringUntil('\n');
     }
     lastLineEmpty = false;
-    //sendResponse(client);
     client.stop();
   }
 }
 
 void tick(void) {
-  if (millis() - lastMillis > 200) {
+  //__|-|__ tick 90 ms :  status changed between 50 and 150 ms
+  if (millis() - lastChange > 50 && millis() - lastChange < 150) {
     etat = !etat;
     mwh ++;
-    lastMillis = millis();
+    lastChange = millis();
     digitalWrite(PINLED, etat);
   }
 }
@@ -75,15 +75,4 @@ unsigned long getMwh() {
   mwh = 0;
   return tmp;
 }
-void sendCoucou(EthernetClient client) {
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/html");
-  client.println("Connnection: close");
-  client.println();
-  client.println("<!DOCTYPE HTML>");
-  client.println("<html>");
-  client.println("<body>");
-  client.println("Hey !!!!");
-  client.println("</body>");
-  client.println("</html>");
-}
+
