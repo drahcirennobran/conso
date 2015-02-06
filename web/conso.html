@@ -10,8 +10,8 @@
             var graph;
 
 chart = AmCharts.makeChart("chartdiv",{
-	   "type": "serial",
-	   "theme": "none",
+		"type": "serial",
+		"theme": "none",
            "pathToImages": "http://www.amcharts.com/lib/3/images/",
            "dataDateFormat": "YYYY-MM-DD JJ:NN:SS",
           "valueAxes": [{
@@ -20,20 +20,21 @@ chart = AmCharts.makeChart("chartdiv",{
             "position": "left"
         }],
         "graphs": [{
-	   "id": "g1",
-            "lineThickness": 2,
-	   "fillAlphas": 0.4,
-            "title": "red line",
-            "valueField": "mwh"
+			"id": "g1",
+			"type": "column",
+			"lineThickness": 2,
+			"fillAlphas": 0.4,
+			"title": "red line",
+			"valueField": "mwh"
         }],
-        "chartScrollbar": {
-	   "graph": "g1",
-	   "scrollbarHeight": 50
+		"chartScrollbar": {
+		"graph": "g1",
+		"scrollbarHeight": 50
 	   },
         "chartCursor": {
             "cursorPosition": "mouse",
             "pan": true,
-	   "categoryBalloonDateFormat": "JJ:NN:SS",
+		"categoryBalloonDateFormat": "JJ:NN:SS",
         },
         "categoryField": "date",
         "categoryAxis": {
