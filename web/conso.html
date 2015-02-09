@@ -1,131 +1,124 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-<head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Consommation du cumulus</title>
-<script src="../amcharts/amcharts.js" type="text/javascript"></script>
-<script src="../amcharts/serial.js" type="text/javascript"></script>
-<script src="../amcharts/gauge.js" type="text/javascript"></script>
-<script type="text/javascript">
-           var chart;
-            var graph;
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Consommation du cumulus</title>
+		<script src="../amcharts/amcharts.js" type="text/javascript"></script>
+		<script src="../amcharts/serial.js" type="text/javascript"></script>
+		<script src="../amcharts/gauge.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			var chart;
+			var graph;
 
-chart = AmCharts.makeChart("chartdiv",{
-		"type": "serial",
-		"theme": "none",
-           "pathToImages": "http://www.amcharts.com/lib/3/images/",
-           "dataDateFormat": "YYYY-MM-DD JJ:NN:SS",
-	   "columnWidth": 0.1,
-          "valueAxes": [{
-            "id":"v1",
-            "axisAlpha": 0,
-            "position": "left"
-        }],
-        "graphs": [{
-			"id": "g1",
-			"type": "step",
-			"lineThickness": 2,
-			"fillAlphas": 0.4,
-			"title": "red line",
-			"valueField": "mwh"
-        }],
-		"chartScrollbar": {
-		"graph": "g1",
-		"scrollbarHeight": 50
-	   },
-        "chartCursor": {
-            "cursorPosition": "mouse",
-            "pan": true,
-		"categoryBalloonDateFormat": "JJ:NN:SS",
-        },
-        "categoryField": "date",
-        "categoryAxis": {
-            "parseDates": true,
-            "dashLength": 1,
-            "minorGridEnabled": true,
-            "position": "top",
-	   "minPeriod": "15mm"
-        }
-});
-AmCharts.loadJSON = function(url) {
-  if (window.XMLHttpRequest) {
-    var request = new XMLHttpRequest();
-  } else {
-    var request = new ActiveXObject('Microsoft.XMLHTTP');
-  }
+			chart = AmCharts.makeChart(
+				"cumulusQuarterchartdiv",{
+					"type": "serial",
+					"theme": "none",
+					"pathToImages": "http://www.amcharts.com/lib/3/images/",
+					"dataDateFormat": "YYYY-MM-DD JJ:NN:SS",
+					"columnWidth": 0.1,
+					"valueAxes": [{
+						"id":"v1",
+						"axisAlpha": 0,
+						"position": "left"
+					}],
+					"graphs": [{
+						"id": "g1",
+						"type": "step",
+						"lineThickness": 2,
+						"fillAlphas": 0.4,
+						"title": "red line",
+						"valueField": "mwh"
+					}],
+					"chartScrollbar": {
+						"graph": "g1",
+						"scrollbarHeight": 50
+					},
+					"chartCursor": {
+						"cursorPosition": "mouse",
+						"pan": true,
+						"categoryBalloonDateFormat": "JJ:NN:SS",
+					},
+					"categoryField": "date",
+					"categoryAxis": {
+						"parseDates": true,
+						"dashLength": 1,
+						"minorGridEnabled": true,
+						"position": "top",
+						"minPeriod": "15mm"
+					}
+				}
+			);
+			AmCharts.loadJSON = function(url) {
+				if (window.XMLHttpRequest) {
+					var request = new XMLHttpRequest();
+				} else {
+					var request = new ActiveXObject('Microsoft.XMLHTTP');
+				}
+				request.open('GET', url, false);
+				request.send();
+				return eval(request.responseText);
+			};
+			var time = (new Date()).getTime();
+			console.debug(time);
+			var chartData = AmCharts.loadJSON('appname/consoData.py?time=' + time);
 
-  request.open('GET', url, false);
-  request.send();
+			chart.dataProvider = chartData;
+			chart.addListener("rendered", zoomChart);
+			chart.invalidateSize();
+			zoomChart();
+			function zoomChart(){
+				chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+			}
 
-  return eval(request.responseText);
-};
-var time = (new Date()).getTime();
-console.debug(time);
-var chartData = AmCharts.loadJSON('appname/consoData.py?time=' + time);
-
-chart.dataProvider = chartData;
-chart.addListener("rendered", zoomChart);
-chart.invalidateSize();
-zoomChart();
-function zoomChart(){
-    chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
-}
-
-	   AmCharts.makeChart("cumulusGaugeChartdiv",
-	   {
-	   "type": "gauge",
-	   "pathToImages": "http://cdn.amcharts.com/lib/3/images/",
-	   "arrows": [
-	   {
-	   "id": "GaugeArrow-1"
-	   }
-	   ],
-	   "axes": [
-	   {
-	   "bottomText": "watt heure",
-	   "bottomTextYOffset": -20,
-	   "endValue": 220,
-	   "id": "GaugeAxis-1",
-	   "valueInterval": 10,
-	   "bands": [
-	   {
-	   "color": "#00CC00",
-	   "endValue": 90,
-	   "id": "GaugeBand-1",
-	   "startValue": 0
-	   },
-	   {
-	   "color": "#ffac29",
-	   "endValue": 130,
-	   "id": "GaugeBand-2",
-	   "startValue": 90
-	   },
-	   {
-	   "color": "#ea3838",
-	   "endValue": 220,
-	   "id": "GaugeBand-3",
-	   "innerRadius": "95%",
-	   "startValue": 130
-	   }
-	   ]
-	   }
-	   ],
-	   "allLabels": [],
-	   "balloon": {},
-	   "titles": [
-	   {
-	   "id": "Title-1",
-	   "size": 15,
-	   "text": "Cumulus "
-	   }
-	   ]
-	   }
-	   );
-</script>
-</head>
+			AmCharts.makeChart(
+			"cumulusGaugeChartdiv", {
+				"type": "gauge",
+				"pathToImages": "http://cdn.amcharts.com/lib/3/images/",
+				"arrows": [{
+					"id": "GaugeArrow-1"
+				}],
+				"axes": [{
+					"bottomText": "watt heure",
+					"bottomTextYOffset": -20,
+					"endValue": 220,
+					"id": "GaugeAxis-1",
+					"valueInterval": 10,
+					"bands": [{
+							"color": "#00CC00",
+							"endValue": 90,
+							"id": "GaugeBand-1",
+							"startValue": 0
+						},
+						{
+							"color": "#ffac29",
+							"endValue": 130,
+							"id": "GaugeBand-2",
+							"startValue": 90
+						},
+						{
+							"color": "#ea3838",
+							"endValue": 220,
+							"id": "GaugeBand-3",
+							"innerRadius": "95%",
+							"startValue": 130
+						}
+					]
+				}],
+				"allLabels": [],
+				"balloon": {},
+				"titles": [{
+					"id": "Title-1",
+					"size": 15,
+					"text": "Cumulus "
+				}]
+			}
+			);
+		</script>
+	</head>
 
 <body>
-    <div id="chartdiv" style="width: 900px; height: 500px; float:left;"></div>
+    <div id="cumulusQuarterchartdiv" style="width: 900px; height: 500px; float:left;"></div>
     <div id="cumulusGaugeChartdiv" style="width: 350px; height: 350px; background-color: #FFFFFF; float:left;" ></div>
 </body>
 </html>
