@@ -39,10 +39,14 @@ void loop() {
       if (isEmptyLine(line)) {
         lastLineEmpty = true;
       }
-      else if (containsCommand(line)) {
-        //client.println(getMwh());
+      else if (line.indexOf("GET /mwh") != -1) {
         client.println(String(mwh));
         mwh = 0;
+      }
+      else if (line.indexOf("GET /cumulus_i") != -1) {
+        static float numerateur = 60000;
+        int conso = numerateur / (millis() - lastChange);
+        client.println(String(conso));
       }
       line = client.readStringUntil('\n');
     }
@@ -64,10 +68,6 @@ void tick(void) {
 boolean isEmptyLine(String line) {
   if (line.length() == 0) return true;
   return line.charAt(0) == '\r' || line.charAt(0) == '\n';
-}
-
-boolean containsCommand(String line) {
-  return (line.indexOf("GET /mwh") != -1);
 }
 
 unsigned long getMwh() {
