@@ -49,29 +49,7 @@
 					}
 				}
 			);
-			AmCharts.loadJSON = function(url) {
-				if (window.XMLHttpRequest) {
-					var request = new XMLHttpRequest();
-				} else {
-					var request = new ActiveXObject('Microsoft.XMLHTTP');
-				}
-				request.open('GET', url, false);
-				request.send();
-				return eval(request.responseText);
-			};
-			var time = (new Date()).getTime();
-			console.debug(time);
-			var chartData = AmCharts.loadJSON('appname/consoData.py?time=' + time);
-
-			chart.dataProvider = chartData;
-			chart.addListener("rendered", zoomChart);
-			chart.invalidateSize();
-			zoomChart();
-			function zoomChart(){
-				chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
-			}
-
-			AmCharts.makeChart(
+			gaugeChart = AmCharts.makeChart(
 			"cumulusGaugeChartdiv", {
 				"type": "gauge",
 				"pathToImages": "http://cdn.amcharts.com/lib/3/images/",
@@ -114,6 +92,31 @@
 				}]
 			}
 			);
+
+			AmCharts.loadJSON = function(url) {
+				if (window.XMLHttpRequest) {
+					var request = new XMLHttpRequest();
+				} else {
+					var request = new ActiveXObject('Microsoft.XMLHTTP');
+				}
+				request.open('GET', url, false);
+				request.send();
+				return eval(request.responseText);
+			};
+			var time = (new Date()).getTime();
+			console.debug(time);
+			var chartData = AmCharts.loadJSON('appname/consoData.py?time=' + time);
+			chart.dataProvider = chartData;
+			chart.addListener("rendered", zoomChart);
+			chart.invalidateSize();
+			
+			gaugeChart.arrows.value=30;
+
+			zoomChart();
+			function zoomChart(){
+				chart.zoomToIndexes(chart.dataProvider.length - 40, chart.dataProvider.length - 1);
+			}
+
 		</script>
 	</head>
 
