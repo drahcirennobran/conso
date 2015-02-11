@@ -1,25 +1,40 @@
+from cgi import parse_qs, escape
 import MySQLdb
-db = MySQLdb.connect("localhost","ric","coincoin","conso" )
-cursor = db.cursor()
-sql = "SELECT  idCompteur, captureDate, conso FROM conso"
-try:
-   cursor.execute(sql)
 
-   results = cursor.fetchall()
-   jsonString = []
-   for row in results:
-      idCompteur = row[0]
-      captureDate = row[1]
-      conso = row[2]
-      jsonString.append("{\"id\":%s,\"date\":\"%s\",\"mwh\":%s},\n" % (idCompteur, captureDate, conso))
-except:
-   print "Error: unable to fecth data"
-
-db.close();
+quart = "SELECT  idCompteur, captureDate, conso FROM conso"
+day = "SELECT  idCompteur, captureDate, conso FROM consoByDay"
+month = "SELECT  idCompteur, month, conso FROM consoByMonth"
 
 def application(environ, start_response):
 
-   response_body = '[' + ''.join(jsonString)[:-2] + ']'
+   db = MySQLdb.connect("localhost","ric","coincoin","conso" )
+   cursor = db.cursor()
+   parameters = parse_qs(environ.get('QUERY_STRING', ''))
+   if 'by' in parameters:
+      param = escape(parameters['by'][0])
+      if param=='quart':
+         sql=quart
+      elif param=='day':
+         sql=day
+      elif param=='month':
+         sql=month
+      else:
+         sql=month
+
+   try:
+      cursor.execute(sql)
+      results = cursor.fetchall()
+      jsonString = []
+      for row in results:
+         idCompteur = row[0]
+         captureDate = row[1]
+         conso = row[2]
+         jsonString.append("{\"id\":%s,\"date\":\"%s\",\"mwh\":%s},\n" % (idCompteur, captureDate, conso))
+      response_body = '[' + ''.join(jsonString)[:-2] + ']'
+   except:
+      response_body = '[]'
+
+   db.close();
 
    status = '200 OK'
    response_headers = [('Content-Type', 'application/json'),
