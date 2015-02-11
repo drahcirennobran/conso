@@ -20,7 +20,7 @@ void setup() {
   pinMode(PINLED, OUTPUT);
   digitalWrite(PINLED, etat);
 
-  attachInterrupt(PIN2INT, tick, CHANGE);
+  attachInterrupt(PIN2INT, tick, FALLING);
   Ethernet.begin(mac, ip);
   server.begin();
 }
@@ -57,7 +57,7 @@ void loop() {
 
 void tick(void) {
   //__|-|__ tick 90 ms :  status changed between 50 and 150 ms
-  if (millis() - lastChange > 50 && millis() - lastChange < 150) {
+  if (millis() - lastChange > 200){// && millis() - lastChange < 800) {
     etat = !etat;
     mwh ++;
     lastChange = millis();
