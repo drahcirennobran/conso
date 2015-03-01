@@ -47,7 +47,7 @@
 
 function updateSimpleValueFromWeb() {
 var url="http://78.221.47.212/appname/consoInstantanee.py";
-url="http://78.221.47.212/appname/random.py";
+//url="http://78.221.47.212/appname/random.py";
 
                                 if (window.XMLHttpRequest) {
                                         var request = new XMLHttpRequest();
@@ -70,4 +70,4 @@ console.debug(value);
   }
 }
 gaugeChart.addListener("rendered", updateSimpleValueFromWeb);
-//setInterval(updateSimpleValueFromWeb, 1000);
+setInterval(updateSimpleValueFromWeb, 1000);
