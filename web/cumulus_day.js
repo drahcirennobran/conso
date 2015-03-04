@@ -25,7 +25,7 @@
 					"chartCursor": {
 						"cursorPosition": "mouse",
 						"pan": true,
-						"categoryBalloonDateFormat": "DD/MM/YYYY",
+						"categoryBalloonDateFormat": "EEEE DD/MM/YYYY",
 					},
 					"categoryField": "date",
 					"categoryAxis": {
