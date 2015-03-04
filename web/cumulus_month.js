@@ -3,7 +3,7 @@
 					"type": "serial",
 					"theme": "none",
 					"pathToImages": "http://www.amcharts.com/lib/3/images/",
-					"dataDateFormat": "YYYY-MM-DD JJ:NN:SS",
+					"dataDateFormat": "YYYY-MM-DD",
 					"columnWidth": 0.1,
 					"valueAxes": [{
 						"id":"v1",
@@ -25,7 +25,7 @@
 					"chartCursor": {
 						"cursorPosition": "mouse",
 						"pan": true,
-						"categoryBalloonDateFormat": "JJ:NN:SS",
+						"categoryBalloonDateFormat": "DD/MM/YYYY",
 					},
 					"categoryField": "date",
 					"categoryAxis": {
