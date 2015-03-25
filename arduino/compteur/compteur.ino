@@ -6,9 +6,9 @@
 #define PIN3INT 1
 #define PINLED 7
 
-int etat = HIGH;
-unsigned long mwh[25];
-unsigned long lastChange[2];
+volatile int etat = HIGH;
+volatile unsigned long mwh[25];
+volatile unsigned long lastChange[2];
 
 byte mac[] = {
   0x90, 0xA2, 0xDA, 0x0E, 0xA1, 0x92
