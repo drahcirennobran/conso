@@ -6,13 +6,22 @@ import urllib
 db = MySQLdb.connect("localhost","ric","coincoin","conso" )
 cursor = db.cursor()
 
-link = "http://192.168.0.102:31415/mwh"
-f = urllib.urlopen(link)
-conso = f.read()
+link1 = "http://192.168.0.102:31415/cumulusmwh"
+link2 = "http://192.168.0.102:31415/chauffagemwh"
 
-sql = "insert into conso (idCompteur , conso) VALUES (1, " + conso + ");"
+f1 = urllib.urlopen(link1)
+f2 = urllib.urlopen(link1)
+
+conso1 = f1.read()
+conso2 = f2.read()
+
+
+sql1 = "insert into conso (idCompteur , conso) VALUES (1, " + conso1 + ");"
+sql2 = "insert into conso (idCompteur , conso) VALUES (2, " + conso2 + ");"
+
 try:
-    cursor.execute(sql)
+    cursor.execute(sql1)
+    cursor.execute(sql2)
     db.commit()
 except:
     db.rollback()
