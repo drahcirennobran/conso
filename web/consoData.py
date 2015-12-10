@@ -1,9 +1,9 @@
 from cgi import parse_qs, escape
 import MySQLdb
 
-quart = "SELECT  idCompteur, captureDate, conso FROM conso where captureDate > DATE_SUB(now(), INTERVAL 1 MONTH) AND idCompteur=1 order by captureDate"
-day = "SELECT  idCompteur, captureDate, conso FROM consoByDay where captureDate > DATE_SUB(now(), INTERVAL 3 MONTH) AND idCompteur=1 order by captureDate"
-month = "SELECT  idCompteur, month, conso FROM consoByMonth where idCompteur=1"
+quart = "SELECT  idCompteur, captureDate, conso FROM conso where captureDate > DATE_SUB(now(), INTERVAL 1 MONTH) AND idCompteur=? order by captureDate"
+day = "SELECT  idCompteur, captureDate, conso FROM consoByDay where captureDate > DATE_SUB(now(), INTERVAL 3 MONTH) AND idCompteur=? order by captureDate"
+month = "SELECT  idCompteur, month, conso FROM consoByMonth where idCompteur=?"
 
 def application(environ, start_response):
 
@@ -21,8 +21,17 @@ def application(environ, start_response):
       else:
          sql=month
 
-   try:
-      cursor.execute(sql)
+   if 'id' in parameters:
+      param = escape(parameters['id'][0])
+      if param=='1':
+         equipement=1
+      elif param=='2':
+         equipement=2
+      else:
+         equipement=1
+
+	try:
+      cursor.execute(sql, equipement)
       results = cursor.fetchall()
       jsonString = []
       for row in results:
