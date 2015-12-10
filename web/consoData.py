@@ -30,7 +30,7 @@ def application(environ, start_response):
       else:
          equipement=1
 
-	try:
+   try:
       cursor.execute(sql, equipement)
       results = cursor.fetchall()
       jsonString = []
