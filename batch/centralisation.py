@@ -10,9 +10,9 @@ link1 = "http://192.168.0.102:31415/cumulusmwh"
 link2 = "http://192.168.0.102:31415/chauffagemwh"
 
 f1 = urllib.urlopen(link1)
-f2 = urllib.urlopen(link1)
-
 conso1 = f1.read()
+
+f2 = urllib.urlopen(link2)
 conso2 = f2.read()
 
 
